@@ -48,6 +48,7 @@
       <div class="step preview-container">
         <div class="preview-area">
           <div class="carousel-container">
+           <%--  사진 담는 부분--%>
             <div class="carousel-track"></div>
             <button class="carousel-prev">
               <i class="fa-solid fa-chevron-left"></i>
@@ -55,6 +56,7 @@
             <button class="carousel-next">
               <i class="fa-solid fa-chevron-right"></i>
             </button>
+             <!-- 슬라이드 아랫 부분 -->
             <div class="carousel-indicators"></div>
           </div>
         </div>
