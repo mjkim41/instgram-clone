@@ -11,9 +11,50 @@ let elements = {
     $fileInput: $modal.querySelector('#fileInput'),
 };
 
+// 모달 바디 스텝을 이동하는 함수
+function goToStep(step) {
+    // 기존 스텝 컨테이너의 active를 제거하고 해당 step컨테이너에 active부여
+    [...$modal.querySelectorAll('.step')].forEach(($stepContainer, index) => {
+        // if ($stepContainer.classList.contains('active')) {
+        //     $stepContainer.classList.remove('active');
+        // }
+        // if (step === index + 1) {
+        //     $stepContainer.classList.add('active');
+        $stepContainer.classList.toggle('active', step === index + 1);
+    });
+}
+
 // 파일 업로드 관련 이벤트 함수
 function setUpFileUploadEvents() {
     const { $uploadBtn, $fileInput } = elements;
+
+    //  파일을 검사하고 다음 단계로 이동하는 함수(밑에서 쓸 함수)
+    const handleFiles = (files) => {
+        // 파일의 개수가 10객 넘는지 검사
+        if (files.length > 2) {
+            alert('최대 10개의 파일만 선택 가능합니다.');
+            return;
+        }
+
+        // 파일이 이미지인지 확인
+        const validFiles = files.filter(file => {
+            if (!file.type.startsWith('image')) {
+                alert(`${file.name}은(는) 이미지가 아닙니다.`);
+                return false;
+            }
+            return true;
+        }).filter(file => {
+            if (file.size > 10 * 1024 * 1024) {
+                alert(`${file.name}은(는) 10MB를 초과합니다.`);
+                return false;
+            }
+            return true;
+        });
+
+        console.log(validFiles);
+        goToStep(2);
+
+    };
 
     // 업로드 버튼을 누르면 파일선택창이 대신 눌리도록 조작
     $uploadBtn.addEventListener('click', e => $fileInput.click());
@@ -21,7 +62,10 @@ function setUpFileUploadEvents() {
     // 파일 선택이 끝났을 때 파일정보를 읽는 이벤트
     $fileInput.addEventListener('change', e => {
         console.log(e.target.files);
-
+        // 유사 배열을 배열로 변환
+        const files = [...e.target.files];
+        // 파일이 있다면, 파일 검사를 하겠다.
+        if( files.length > 0) handleFiles(files);
     });
 }
 
