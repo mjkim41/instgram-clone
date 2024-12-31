@@ -1,38 +1,55 @@
 
 
 // 피드 생성 모달을 전역관리
-let $modal = document.getElementById('createPostModal');
+const $modal = document.getElementById('createPostModal');
 
 // 모달 관련 DOM들을 저장할 객체
-let elements = {
+const elements = {
     $closeBtn: $modal.querySelector('.modal-close-button'),
     $backdrop: $modal.querySelector('.modal-backdrop'),
     $uploadBtn: $modal.querySelector('.upload-button'),
     $fileInput: $modal.querySelector('#fileInput'),
+    $backStepBtn: $modal.querySelector('.back-button'),
+    $nextStepBtn: $modal.querySelector('.next-button'),
+    $modalTitle: $modal.querySelector('.modal-title'),
 };
 
 // 모달 바디 스텝을 이동하는 함수
 function goToStep(step) {
+
+    const { $backStepBtn, $nextStepBtn, $modalTitle } = elements;
+
     // 기존 스텝 컨테이너의 active를 제거하고 해당 step컨테이너에 active부여
     [...$modal.querySelectorAll('.step')].forEach(($stepContainer, index) => {
-        // if ($stepContainer.classList.contains('active')) {
-        //     $stepContainer.classList.remove('active');
-        // }
-        // if (step === index + 1) {
-        //     $stepContainer.classList.add('active');
         $stepContainer.classList.toggle('active', step === index + 1);
     });
+
+    // 각 스텝별 버튼 활성화/비활성화 처리
+    if (step === 1) {
+        $nextStepBtn.style.display = 'none';
+        $backStepBtn.style.visibility = 'hidden';
+        $modalTitle.textContent = '새 게시물 만들기';
+    } else if (step === 2) {
+        $nextStepBtn.style.display = 'block';
+        $backStepBtn.style.visibility = 'visible';
+        $modalTitle.textContent = '편집';
+        $nextStepBtn.textContent = '다음';
+    } else if (step === 3) {
+        $nextStepBtn.textContent = '공유하기';
+        $modalTitle.textContent = '새 게시물 만들기';
+    }
+
 }
 
 // 파일 업로드 관련 이벤트 함수
 function setUpFileUploadEvents() {
     const { $uploadBtn, $fileInput } = elements;
 
-    //  파일을 검사하고 다음 단계로 이동하는 함수(밑에서 쓸 함수)
-    const handleFiles = (files) => {
-        // 파일의 개수가 10객 넘는지 검사
-        if (files.length > 2) {
-            alert('최대 10개의 파일만 선택 가능합니다.');
+    // 파일을 검사하고 다음 단계로 이동하는 함수
+    const handleFiles = files => {
+        // 파일의 개수가 10개가 넘는지 검사
+        if (files.length > 3) {
+            alert('최대 3개의 파일만 선택 가능합니다.');
             return;
         }
 
@@ -51,7 +68,7 @@ function setUpFileUploadEvents() {
             return true;
         });
 
-        console.log(validFiles);
+        // 모달 step 2로 이동
         goToStep(2);
 
     };
@@ -61,11 +78,8 @@ function setUpFileUploadEvents() {
 
     // 파일 선택이 끝났을 때 파일정보를 읽는 이벤트
     $fileInput.addEventListener('change', e => {
-        console.log(e.target.files);
-        // 유사 배열을 배열로 변환
         const files = [...e.target.files];
-        // 파일이 있다면, 파일 검사를 하겠다.
-        if( files.length > 0) handleFiles(files);
+        if (files.length > 0) handleFiles(files);
     });
 }
 
