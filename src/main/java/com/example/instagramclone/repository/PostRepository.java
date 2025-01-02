@@ -1,9 +1,8 @@
-package com.example.instagramclone.Repository;
+package com.example.instagramclone.repository;
 
 import com.example.instagramclone.domain.post.entity.Post;
 import com.example.instagramclone.domain.post.entity.PostImage;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 public class PostImage {
 
     private Long id;
-    private Long post_id;
-    private String image_url;
+    private Long postId;
+    private String imageUrl;
     private int imageOrder;
     private LocalDateTime createdAt;
 
