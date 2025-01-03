@@ -15,10 +15,9 @@ public interface PostRepository {
     // 피드 이미지 저장
     void saveFeedImage(PostImage postImage);
 
-    // 특정 피드에 첨부된 이미지 목록을 조회
+    // 특정 피드에 첨부된 이미지 목록 조회
     List<PostImage> findImagesByPostId(Long postId);
 
     // 전체 피드 게시물 목록 조회
     List<Post> findAll();
-
 }
