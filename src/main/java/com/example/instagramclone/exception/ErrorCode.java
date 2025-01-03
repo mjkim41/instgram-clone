@@ -10,17 +10,19 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-      /* [한 파일에 여러 Custom Exception을 만드는 방법]
-       - ENUM 클래스를 만들고, 각 Exception을 상수(일종의 객체로 보면 됨)으로 만들고,
-         이 떄 Exception의 생성자로 필요한 필드인 errorMessage와 HttpStatus를 적어준다.
-     */
-
     // 알 수 없는 서버오류
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 서버 오류입니다. 점검 후 조치하겠습니다."),
+
+    // File 관련 오류
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
+    INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 파일 형식입니다."),
+    FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "파일 크기가 제한을 초과했습니다."),
+    TOO_MANY_FILES(HttpStatus.BAD_REQUEST, "파일 개수가 제한을 초과했습니다."),
+
+
     ;
 
     private final HttpStatus status;
     private final String message;
-
 
 }
