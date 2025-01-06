@@ -34,20 +34,25 @@ class CarouselManager {
     // 초기 이미지파일 배열 받기
     init(files) {
         this.slides = files;
+        // 슬라이드를 0번으로 다시 세팅
+        this.goToSlide(0);
         // 슬라이드 띄우기
         this.setUpPreview();
     }
 
-    // 이미지 파일 대신 이미지 태그를 받아 이벤트 처리할 수행하는 함수
+    // 이미지파일 대신 이미지태그를 받아 이벤트처리만 수행하는 함수
     initWithImgTag($images) {
         this.slides = $images;
-        this.goToSlide(0); // 슬라이드 움직이는 것만 조작해주면 됨
+        this.goToSlide(0);
     }
 
     // 슬라이드 이미지 렌더링
     setUpPreview() {
+
         // 이미지 트랙 리셋
         this.track.innerHTML = '';
+        // 인디케이터 리셋
+        this.indicatorContainer.innerHTML = '';
 
         // 슬라이드 이미지 생성
         this.slides.forEach((file, index) => {
@@ -92,9 +97,9 @@ class CarouselManager {
 
         // 인디케이터 변화 업데이트
         const $indicators = [...this.indicatorContainer.children];
-        $indicators.forEach(($indicator, i) => {
-            $indicator.classList.toggle('active', i === index);
-        })
+        $indicators.forEach(($ind, i) => {
+            $ind.classList.toggle('active', i === index);
+        });
 
     }
 
