@@ -11,6 +11,13 @@ async function fetchFeeds() {
     return await response.json();
 }
 
+function convertHashtagsToLinks(content) {
+    // #으로 시작하고 공백이나 줄바꿈으로 끝나는 문자열 찾기
+    return content.replace(/#[\w가-힣]+/g, match =>
+        `<a href="#" class="hashtag">${match}</a>`
+    );
+}
+
 
 // 피드의 날짜를 조작
 function formatDate(dateString) {
@@ -45,7 +52,7 @@ function truncateContent(writer, content, maxLength = 20) {
     if (content.length <= maxLength) {
         return `
       <a href="#" class="post-username">${writer}</a>
-      <span class="post-caption">${content}</span>
+      <span class="post-caption">${convertHashtagsToLinks(content)}</span>
     `;
     }
 
