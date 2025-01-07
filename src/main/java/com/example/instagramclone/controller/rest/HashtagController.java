@@ -21,7 +21,7 @@ public class HashtagController {
     private final HashtagService hashtagService;
 
     // ?keyword=아
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> searchhashtag(@RequestParam String keyword) {
 
         log.info("Searching hashtags with keyword: {}", keyword);

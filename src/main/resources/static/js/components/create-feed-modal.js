@@ -1,5 +1,6 @@
 
 import CarouselManager from "../ui/CarouselManager.js";
+import HashtagSearch from "../ui/HashtagSearch.js";
 
 // step 모듈내에서 전역관리
 let currentStep = 1;
@@ -129,20 +130,20 @@ function setUpFileUploadEvents() {
   // 파일을 검사하는 함수
   const validateFiles = (files) => {
     return files
-      .filter((file) => {
-        if (!file.type.startsWith('image')) {
-          alert(`${file.name}은(는) 이미지가 아닙니다.`);
-          return false;
-        }
-        return true;
-      })
-      .filter((file) => {
-        if (file.size > 10 * 1024 * 1024) {
-          alert(`${file.name}은(는) 10MB를 초과합니다.`);
-          return false;
-        }
-        return true;
-      });
+        .filter((file) => {
+          if (!file.type.startsWith('image')) {
+            alert(`${file.name}은(는) 이미지가 아닙니다.`);
+            return false;
+          }
+          return true;
+        })
+        .filter((file) => {
+          if (file.size > 10 * 1024 * 1024) {
+            alert(`${file.name}은(는) 10MB를 초과합니다.`);
+            return false;
+          }
+          return true;
+        });
   };
 
   // 파일을 검사하고 다음 단계로 이동하는 함수
@@ -167,10 +168,10 @@ function setUpFileUploadEvents() {
     // 최초 생성이라면 새로 만든다.
     else {
       step2Carousel = new CarouselManager(
-        $modal.querySelector('.preview-container')
+          $modal.querySelector('.preview-container')
       );
       step3Carousel = new CarouselManager(
-        $modal.querySelector('.write-container')
+          $modal.querySelector('.write-container')
       );
 
       step2Carousel.init(validFiles);
@@ -245,9 +246,9 @@ function setUpModalEvents() {
 
   // 피드 생성 모달 열기 이벤트
   document
-    .querySelector('.fa-square-plus')
-    .closest('.menu-item')
-    .addEventListener('click', openModal);
+      .querySelector('.fa-square-plus')
+      .closest('.menu-item')
+      .addEventListener('click', openModal);
 
   // X버튼 눌렀을 때
   $closeBtn.addEventListener('click', closeModal);
@@ -299,12 +300,21 @@ function setupNestedModalEvents() {
   });
 }
 
+
+// 해시태그 추천 처리
+function setupSuggestionHashtag() {
+  // 해시태그 모듈을 분리해서 처리
+  const hashtagSearch = new HashtagSearch(elements.$contentTextarea);
+  hashtagSearch.init();
+}
+
 // 이벤트 바인딩 관련 함수
 function bindEvents() {
   setUpModalEvents(); // 모달 관련 이벤트
   setUpFileUploadEvents(); // 파일업로드 관련 이벤트
   setupTextareaEvents(); // 텍스트 입력 관련 이벤트
   setupNestedModalEvents(); // 중첩 모달 관련 이벤트
+  setupSuggestionHashtag(); // 해시태그 추천관련 이벤트
 }
 
 // 모달 관련 JS 함수 - 외부에 노출
