@@ -40,6 +40,7 @@ public class SignUpRequest {
             phone = this.emailOrPhone.replaceAll("[^0-9]", "");
         }
 
+
         return Member.builder()
                 .email(email)
                 .phone(phone)
