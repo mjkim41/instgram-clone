@@ -44,6 +44,7 @@ function initSignUp() {
         password: $form.querySelector('input[name="password"]'),
     };
 
+
     // 비밀번호 숨기기 토글 활성화
     createPasswordToggle($inputs.password);
 
@@ -83,6 +84,7 @@ function initSignUp() {
             updateSubmitButton($inputs, $submitButton);
         }
     };
+
 
     // 4개의 입력창에 입력 이벤트 바인딩
     Object.values($inputs).forEach(($input) => {

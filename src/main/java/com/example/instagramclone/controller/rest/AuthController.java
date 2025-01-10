@@ -1,5 +1,6 @@
 package com.example.instagramclone.controller.rest;
 
+import com.example.instagramclone.domain.member.dto.request.LoginRequest;
 import com.example.instagramclone.domain.member.dto.request.SignUpRequest;
 import com.example.instagramclone.domain.member.dto.response.DuplicateCheckResponse;
 import com.example.instagramclone.service.MemberService;
@@ -43,6 +44,18 @@ public class AuthController {
         DuplicateCheckResponse responseDto = memberService.checkDuplicate(type, value);
 
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    // 로그인 검증 API
+    // GET 방식은 정보를 보낼 떄 ?로 보내는데, 그럼 보안상 좋지 않으므로
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody @Valid LoginRequest loginRequest) {
+
+        log.info("request for login: {}", loginRequest.getUsername());
+
+        Map<String, Object> responseMap = memberService.authenticate(loginRequest);
+
+        return ResponseEntity.ok().body(responseMap);
     }
 
 }
