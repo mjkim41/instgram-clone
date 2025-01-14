@@ -2,7 +2,6 @@ package com.example.instagramclone.controller.rest;
 
 import com.example.instagramclone.domain.post.dto.request.PostCreate;
 import com.example.instagramclone.domain.post.dto.response.PostResponse;
-import com.example.instagramclone.domain.post.entity.Post;
 import com.example.instagramclone.exception.ErrorCode;
 import com.example.instagramclone.exception.PostException;
 import com.example.instagramclone.service.PostService;
@@ -10,7 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,15 +24,19 @@ public class PostController {
 
     private final PostService postService;
 
-    // # 피드 목록 조회 요청
+    // 피드 목록 조회 요청
     @GetMapping
-    public ResponseEntity<?> getFeeds() {
+    public ResponseEntity<?> getFeeds(
+            @AuthenticationPrincipal String username
+    ) {
+
+        log.info("피드에서 인증된 사용자명: {}", username);
+
         List<PostResponse> allFeeds = postService.findAllFeeds();
 
         return ResponseEntity
                 .ok()
                 .body(allFeeds);
-
     }
 
     // 피드 생성 요청
@@ -43,6 +46,7 @@ public class PostController {
             @RequestPart("feed") @Valid PostCreate postCreate
             // 이미지 파일 목록 multipart-file
             , @RequestPart("images") List<MultipartFile> images
+            , @AuthenticationPrincipal String username // 인증된 사용자 이름
     ) {
 
         // 파일 업로드 개수 검증
@@ -58,7 +62,7 @@ public class PostController {
         log.info("feed create request: POST - {}", postCreate);
 
         // 이미지와 JSON을 서비스클래스로 전송
-        Long postId = postService.createFeed(postCreate);
+        Long postId = postService.createFeed(postCreate, username);
 
         // 응답 메시지 JSON 생성 { "id": 23, "message": "save success" }
         Map<String, Object> response = Map.of(

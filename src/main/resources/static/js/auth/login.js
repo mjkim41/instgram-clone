@@ -1,3 +1,4 @@
+
 // 로그인 form 가져오기
 const $loginForm = document.querySelector('.auth-form');
 
@@ -11,20 +12,32 @@ async function handleLogin(e) {
 
     // 서버로 보낼 데이터
     const payload = {
-        username: username,
-        password: password
+        username,
+        password
     };
 
-    // api 통신 보내기
+    // API 통신 보내기
     const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(payload)
     });
 
     const data = await response.json();
 
-    alert(data.message);
+    // 로그인이 성공할 시 처리
+    if (response.ok) {
+
+        // 브라우저 저장소에 토큰을 저장시킴
+        localStorage.setItem('accessToken', data.accessToken);
+
+        // 홈화면으로 이동
+        window.location.href = '/';
+    } else {
+        alert(data.message);
+    }
 
 }
 

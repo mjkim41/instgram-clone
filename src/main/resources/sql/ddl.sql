@@ -50,3 +50,22 @@ CREATE TABLE post_hashtags
 CREATE INDEX idx_hashtag_name ON hashtags (name);
 CREATE INDEX idx_post_hashtags_post_id ON post_hashtags (post_id);
 CREATE INDEX idx_post_hashtags_hashtag_id ON post_hashtags (hashtag_id);
+
+-- 기존 피드 와 해시태그 모두 삭제
+DELETE FROM post_hashtags;
+DELETE FROM hashtags;
+DELETE FROM posts;
+
+COMMIT;
+
+-- posts 테이블 수정
+ALTER TABLE posts
+DROP COLUMN writer, -- 기존 writer 컬럼 제거
+    ADD COLUMN member_id BIGINT NOT NULL, -- 회원 ID 컬럼 추가
+    ADD CONSTRAINT fk_posts_member -- FK 제약조건 추가
+        FOREIGN KEY (member_id)
+            REFERENCES users (id)
+            ON DELETE CASCADE;
+
+-- 인덱스 추가
+CREATE INDEX idx_posts_member_id ON posts (member_id);

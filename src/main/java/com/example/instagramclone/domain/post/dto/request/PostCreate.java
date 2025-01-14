@@ -12,9 +12,6 @@ import java.util.List;
 @EqualsAndHashCode @Builder @NoArgsConstructor @AllArgsConstructor
 public class PostCreate {
 
-    @NotBlank(message = "작성자 정보는 필수입니다")
-    private String writer;
-
     @Size(max = 2200, message = "피드 내용은 최대 2200자 까지 입력 가능합니다.")
     private String content;
 
@@ -24,7 +21,6 @@ public class PostCreate {
     // 엔터티변환 편의 메서드
     public Post toEntity() {
         return Post.builder()
-                .writer(this.writer)
                 .content(this.content)
                 .build();
     }
