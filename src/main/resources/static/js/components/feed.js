@@ -1,5 +1,6 @@
 
 import CarouselManager from "../ui/CarouselManager.js";
+import PostLikeManager from "../ui/PostLikeManager.js";
 import { fetchWithAuth } from "../util/api.js";
 
 // 피드가 들어갈 전체영역
@@ -15,7 +16,7 @@ async function fetchFeeds() {
 }
 
 // 해시태그만 추출해서 링크로 감싸기
-function convertHashtagsToLinks(content) {
+export function convertHashtagsToLinks(content) {
     // #으로 시작하고 공백이나 줄바꿈으로 끝나는 문자열 찾기
     return content.replace(
         /#[\w가-힣]+/g,
@@ -25,7 +26,7 @@ function convertHashtagsToLinks(content) {
 
 
 // 피드의 날짜를 조작
-function formatDate(dateString) {
+export function formatDate(dateString) {
     // 날짜문자열을 날짜객체로 변환
     const date = new Date(dateString);
 
@@ -76,7 +77,10 @@ function truncateContent(writer, content, maxLength = 20) {
 
 
 // 한개의 피드를 렌더링하는 함수
-function createFeedItem({ username, profileImageUrl, content, images, createdAt }) {
+function createFeedItem({ feed_id: feedId, username, profileImageUrl, content, images, createdAt, likeStatus }) {
+
+
+    const { liked, likeCount } = likeStatus;
 
     // const makeImageTags = (images) => {
     //   let imgTag = '';
@@ -87,7 +91,7 @@ function createFeedItem({ username, profileImageUrl, content, images, createdAt 
     // };
 
     return `
-    <article class="post">
+    <article class="post" data-post-id="${feedId}">
       <div class="post-header">
         <div class="post-user-info">
           <div class="post-profile-image">
@@ -145,8 +149,8 @@ function createFeedItem({ username, profileImageUrl, content, images, createdAt 
       <div class="post-actions">
         <div class="post-buttons">
           <div class="post-buttons-left">
-            <button class="action-button like-button">
-              <i class="fa-regular fa-heart"></i>
+            <button class="action-button like-button ${liked ? 'liked' : ''}">
+              <i class="${liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
             </button>
             <button class="action-button comment-button">
               <i class="fa-regular fa-comment"></i>
@@ -160,7 +164,7 @@ function createFeedItem({ username, profileImageUrl, content, images, createdAt 
           </button>
         </div>
         <div class="post-likes">
-          좋아요 <span class="likes-count">0</span>개
+          좋아요 <span class="likes-count">${likeCount}</span>개
         </div>
       </div>
       
@@ -232,6 +236,11 @@ async function renderFeed() {
             $btn.style.display = 'none';
         });
 
+    });
+
+    // 모든 피드에 좋아요 매니저를 세팅
+    $feedContainer.querySelectorAll('.post').forEach($feed => {
+        new PostLikeManager($feed);
     });
 
 }

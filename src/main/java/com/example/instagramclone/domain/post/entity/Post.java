@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter @Setter @EqualsAndHashCode @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor @ToString
 public class Post {
 
     private Long id;
@@ -20,4 +20,5 @@ public class Post {
     // 회원 객체
     private Member member;
 
+//    private List<PostImage> postImages;
 }

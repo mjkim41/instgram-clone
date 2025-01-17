@@ -1,6 +1,7 @@
 package com.example.instagramclone.controller.rest;
 
 import com.example.instagramclone.domain.post.dto.request.PostCreate;
+import com.example.instagramclone.domain.post.dto.response.PostDetailResponse;
 import com.example.instagramclone.domain.post.dto.response.PostResponse;
 import com.example.instagramclone.exception.ErrorCode;
 import com.example.instagramclone.exception.PostException;
@@ -32,7 +33,7 @@ public class PostController {
 
         log.info("피드에서 인증된 사용자명: {}", username);
 
-        List<PostResponse> allFeeds = postService.findAllFeeds();
+        List<PostResponse> allFeeds = postService.findAllFeeds(username);
 
         return ResponseEntity
                 .ok()
@@ -74,4 +75,17 @@ public class PostController {
                 .ok()
                 .body(response);
     }
+
+    // 피드 상세보기 단일 조회 API
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getDetail(
+            @PathVariable Long postId
+            , @AuthenticationPrincipal String username
+    ) {
+
+        PostDetailResponse postDetails = postService.getPostDetails(postId, username);
+
+        return ResponseEntity.ok().body(postDetails);
+    }
+
 }

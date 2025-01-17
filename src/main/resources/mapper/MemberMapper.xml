@@ -28,6 +28,13 @@
         WHERE username = #{username}
     </select>
 
+    <update id="updateProfileImage">
+        UPDATE users
+        SET profile_image_url = #{imageUrl},
+            updated_at        = NOW()
+        WHERE username = #{username}
+    </update>
+
 
 </mapper>
 

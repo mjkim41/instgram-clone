@@ -16,9 +16,11 @@
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/profile.css">
     <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/feed.css">
+    <link rel="stylesheet" href="/css/feed-detail-modal.css">
 
     <!-- JavaScript -->
-    <script src="/js/auth/profile-page.js" type="module" defer></script>
+    <script src="/js/components/profile-page.js" type="module" defer></script>
 </head>
 <body>
 <div class="container">
@@ -34,6 +36,7 @@
                 <div class="profile-image">
                     <img src="/images/default-profile.svg" alt="프로필 이미지">
                 </div>
+                <input type="file" name="profileImage" accept="image/*" style="display: none;">
             </div>
 
             <!-- Profile Info -->
@@ -102,5 +105,6 @@
 
 
 <%@ include file="./create-post-modal.jsp" %>
+<%@ include file="./feed-detail-modal.jsp" %>
 </body>
 </html>
