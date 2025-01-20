@@ -20,12 +20,13 @@
     <link rel="stylesheet" href="/css/suggestions.css">
     <link rel="stylesheet" href="/css/modal.css">
     <link rel="stylesheet" href="/css/like.css">
+    <link rel="stylesheet" href="/css/feed-detail-modal.css">
 
     <!-- Modular JS -->
     <script src="/js/index.js" type="module" defer></script>
 </head>
 <body>
-<div class="container">
+<div class="container feed-page">
     <!-- Left Sidebar -->
     <%@ include file="components/sidebar.jsp" %> <!-- 네비게이션 메뉴 -->
 
@@ -43,6 +44,7 @@
 
 
     <%@ include file="components/create-post-modal.jsp" %> <!-- 모달 섹션 -->
+    <%@ include file="components/feed-detail-modal.jsp" %> <!-- 상세보기 모달 섹션 -->
 </div>
 </body>
 </html>

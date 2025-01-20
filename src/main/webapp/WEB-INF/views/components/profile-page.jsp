@@ -18,12 +18,13 @@
     <link rel="stylesheet" href="/css/modal.css">
     <link rel="stylesheet" href="/css/feed.css">
     <link rel="stylesheet" href="/css/feed-detail-modal.css">
+    <link rel="stylesheet" href="/css/like.css">
 
     <!-- JavaScript -->
     <script src="/js/components/profile-page.js" type="module" defer></script>
 </head>
 <body>
-<div class="container">
+<div class="container profile-page">
     <!-- Left Sidebar -->
     <%@ include file="./sidebar.jsp" %>
 
@@ -36,7 +37,12 @@
                 <div class="profile-image">
                     <img src="/images/default-profile.svg" alt="프로필 이미지">
                 </div>
-                <input type="file" name="profileImage" accept="image/*" style="display: none;">
+                <input
+                        type="file"
+                        name="profileImage"
+                        accept="image/*"
+                        style="display: none;"
+                >
             </div>
 
             <!-- Profile Info -->
@@ -96,15 +102,10 @@
             <!-- Grid Items will be dynamically added here -->
         </div>
     </main>
+
+    <%@ include file="./create-post-modal.jsp" %>
+    <%@ include file="./feed-detail-modal.jsp" %>
 </div>
 
-<!-- Post Modal -->
-<div class="post-modal" style="display: none;">
-    <!-- Modal content will be dynamically added -->
-</div>
-
-
-<%@ include file="./create-post-modal.jsp" %>
-<%@ include file="./feed-detail-modal.jsp" %>
 </body>
 </html>

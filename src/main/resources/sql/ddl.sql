@@ -51,6 +51,28 @@ CREATE INDEX idx_hashtag_name ON hashtags (name);
 CREATE INDEX idx_post_hashtags_post_id ON post_hashtags (post_id);
 CREATE INDEX idx_post_hashtags_hashtag_id ON post_hashtags (hashtag_id);
 
+
+-- 회원 테이블
+CREATE TABLE users
+(
+    id                BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username          VARCHAR(30) NOT NULL UNIQUE,
+    password          VARCHAR(100),        -- OAuth2 사용자는 password가 null일 수 있음
+    email             VARCHAR(100) UNIQUE, -- 이메일과 전화번호 중 하나는 필수
+    phone             VARCHAR(20) UNIQUE,
+    name              VARCHAR(50) NOT NULL,
+    profile_image_url VARCHAR(255),
+    role              VARCHAR(20) NOT NULL DEFAULT 'ROLE_USER',
+    refresh_token     VARCHAR(255),        -- JWT Refresh Token
+    created_at        TIMESTAMP            DEFAULT CURRENT_TIMESTAMP,
+    updated_at        TIMESTAMP            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_login_at     TIMESTAMP,
+
+    INDEX idx_email (email),
+    INDEX idx_phone (phone),
+    INDEX idx_username (username)
+);
+
 -- 기존 피드 와 해시태그 모두 삭제
 DELETE FROM post_hashtags;
 DELETE FROM hashtags;
@@ -87,3 +109,24 @@ CREATE TABLE post_likes
 -- 인덱스 추가
 CREATE INDEX idx_post_likes_post_id ON post_likes (post_id);
 CREATE INDEX idx_post_likes_member_id ON post_likes (member_id);
+
+CREATE TABLE comments
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    post_id    BIGINT NOT NULL,
+    member_id  BIGINT NOT NULL,
+    content    TEXT   NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+-- 조회 성능을 위한 인덱스 추가
+CREATE INDEX idx_comments_post_id ON comments (post_id);
+CREATE INDEX idx_comments_member_id ON comments (member_id);
+
+
+
+
