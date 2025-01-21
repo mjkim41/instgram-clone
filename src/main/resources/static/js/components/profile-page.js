@@ -3,7 +3,9 @@ import initCreateFeedModal from './create-feed-modal.js';
 import initMoreMenu from './more-menu.js';
 import initSideBar from './side-bar.js';
 import { getCurrentUser } from '../util/auth.js';
-import initFeedDetailModal from './feed-detail-modal.js'
+import initFeedDetailModal from './feed-detail-modal.js';
+import initFollow from './follow.js';
+
 
 const $profileImageContainer = document.querySelector(
     '.profile-image-container'
@@ -11,14 +13,14 @@ const $profileImageContainer = document.querySelector(
 
 
 // 이 페이지의 사용자 이름 추출
-function getPageUsername() {
+export function getPageUsername() {
     // URL에서 가져와야 함
     const url = window.location.pathname;
     return url.substring(1);
 }
 
 // 현재 페이지에 들어온 사람이 본인인지 확인
-async function isUserMatched() {
+export async function isUserMatched() {
     const pageUsername = getPageUsername();
     const loggedInUser = await getCurrentUser();
     return pageUsername === loggedInUser.username;
@@ -38,7 +40,7 @@ async function renderProfileHeader({ feedCount, name, username, profileImageUrl 
 
     // 게시물 수 업데이트
     document.querySelector(
-        '.profile-stats li:first-child .stats-number'
+        '.profile-stats .feed-count'
     ).textContent = feedCount;
 
     // 본인의 페이지인지 타인의 페이지인지에 따라 다른 버튼을 렌더링
@@ -75,6 +77,9 @@ async function initProfileHeader() {
     const response = await fetchWithAuth(`/api/profiles/${username}`);
     const profileHeader = await response.json();
 
+    console.log('profile header data: ', profileHeader);
+
+
     // 렌더링 진행
     renderProfileHeader(profileHeader);
 }
@@ -93,10 +98,12 @@ function renderProfileFeeds(feedList) {
                 <div class="grid-item-overlay">
                     <div class="grid-item-stats">
                         <span>
-                            <i class="fa-solid fa-heart"></i> ${feed.likeCount}
+                            <i class="fa-solid fa-heart"></i> 
+                            <span class="grid-likes-count">${feed.likeCount}</span>
                         </span>
                         <span>
-                            <i class="fa-solid fa-comment"></i> ${feed.commentCount}
+                            <i class="fa-solid fa-comment"></i>
+                            <span class="grid-comments-count">${feed.commentCount}</span>
                         </span>
                     </div>
                 </div>
@@ -189,7 +196,7 @@ async function initChangeProfileImage() {
     $fileInput.addEventListener('change', handleProfileImage);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
     //===== 인덱스페이지와 공통 처리 ==== //
     initCreateFeedModal(); // 피드생성 관련 js
@@ -197,9 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initSideBar(); // 사이드바 관련
 
     //===== 프로필 페이지 개별 처리 ===== //
-    initProfileHeader(); // 프로필 페이지 헤더 관련
-    initProfileFeeds();  // 프로필 페이지 피드 관련
-    initChangeProfileImage(); // 프사 변경 관련
-    initFeedDetailModal();
+    await initProfileHeader(); // 프로필 페이지 헤더 관련
+    await initProfileFeeds();  // 프로필 페이지 피드 관련
+    await initChangeProfileImage(); // 프사 변경 관련
+    initFeedDetailModal();  // 상세보기 모달 관련
+    initFollow(); // 팔로우 처리 관련
 
 });

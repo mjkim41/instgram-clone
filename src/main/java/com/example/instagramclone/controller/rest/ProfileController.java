@@ -36,30 +36,33 @@ public class ProfileController {
     // 사용자 프로필 페이지 헤더 데이터를 전송하는 API
     @GetMapping("/{username}")
     public ResponseEntity<ProfileHeaderResponse> getProfileHeader(
-            @PathVariable String username
+            @PathVariable String username,
+            @AuthenticationPrincipal String loginUsername
     ) {
 
-        ProfileHeaderResponse responseData = profileService.getProfileHeader(username);
+        ProfileHeaderResponse responseData = profileService.getProfileHeader(username, loginUsername);
 
         return ResponseEntity.ok().body(responseData);
     }
 
     // 사용자 프로필 페이지 피드 목록 API
     @GetMapping("/{username}/posts")
-    public ResponseEntity<List<ProfileHeaderResponse>> getProfilePosts(
+    public ResponseEntity<List<ProfilePostResponse>> getProfilePosts(
             @PathVariable String username) {
 
-        List<ProfileHeaderResponse> responseList = profileService.findProfilePosts(username);
+        List<ProfilePostResponse> responseList = profileService.findProfilePosts(username);
 
         return ResponseEntity.ok().body(responseList);
     }
 
+    // 프로필 사진 업로드 API
     @PutMapping("/profile-image")
     public ResponseEntity<?> updateProfile(
-            @AuthenticationPrincipal String username
-            , @RequestParam MultipartFile profileImage
+            @AuthenticationPrincipal String username,
+            @RequestParam MultipartFile profileImage
     ) {
         String imageUrl = profileService.updateProfileImage(profileImage, username);
+
         return ResponseEntity.ok().body(Map.of(
                 "imageUrl", imageUrl,
                 "message", "image upload success"

@@ -3,6 +3,7 @@ package com.example.instagramclone.repository;
 import com.example.instagramclone.domain.member.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.Optional;
 
