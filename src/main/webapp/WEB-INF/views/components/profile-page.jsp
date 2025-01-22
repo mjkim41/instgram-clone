@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/css/feed.css">
     <link rel="stylesheet" href="/css/feed-detail-modal.css">
     <link rel="stylesheet" href="/css/like.css">
+    <link rel="stylesheet" href="/css/follow-modal.css">
 
     <!-- JavaScript -->
     <script src="/js/components/profile-page.js" type="module" defer></script>
@@ -58,13 +59,13 @@
                 <!-- Stats Row -->
                 <ul class="profile-stats">
                     <li>
-                        게시물 <span class="stats-number">0</span>
+                        게시물 <span class="stats-number feed-count">0</span>
                     </li>
                     <li>
-                        팔로워 <span class="stats-number">0</span>
+                        팔로워 <span class="stats-number follower-count">0</span>
                     </li>
                     <li>
-                        팔로우 <span class="stats-number">0</span>
+                        팔로우 <span class="stats-number following-count">0</span>
                     </li>
                 </ul>
 
@@ -105,6 +106,26 @@
 
     <%@ include file="./create-post-modal.jsp" %>
     <%@ include file="./feed-detail-modal.jsp" %>
+
+    <!-- 팔로워/팔로잉 모달 -->
+    <div class="follow-modal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <!-- 모달 헤더 -->
+            <div class="modal-header">
+                <h1 class="modal-title">팔로워</h1>
+                <button type="button" class="modal-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- 모달 바디 -->
+            <div class="modal-body">
+                <!-- 사용자 목록이 여기에 동적으로 추가됨 -->
+            </div>
+        </div>
+    </div>
+
 </div>
 
 </body>

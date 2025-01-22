@@ -51,6 +51,7 @@ public class AuthController {
 
     // 로그인 검증 API
     // GET방식의 특징 : ? 를 사용할 수 있음 => 보안상 좋지않음
+    // GET방식의 특징 : ? 를 사용할 수 있음 => 보안상 좋지않음
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @RequestBody @Valid LoginRequest loginRequest
