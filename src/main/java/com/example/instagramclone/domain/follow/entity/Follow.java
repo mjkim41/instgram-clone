@@ -20,4 +20,5 @@ public class Follow {
     // 회원정보 매핑용
     private Member follower; // 팔로우를 받은 사람 정보 조회시 사용
     private Member following; // 팔로우를 건 사람 정보 조회시 사용
+
 }
