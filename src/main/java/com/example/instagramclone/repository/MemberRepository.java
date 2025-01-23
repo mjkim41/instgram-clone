@@ -1,3 +1,4 @@
+
 package com.example.instagramclone.repository;
 
 import com.example.instagramclone.domain.member.entity.Member;

@@ -6,6 +6,7 @@ import com.example.instagramclone.domain.hashtag.entity.PostHashtag;
 import com.example.instagramclone.domain.like.dto.response.LikeStatusResponse;
 import com.example.instagramclone.domain.member.entity.Member;
 import com.example.instagramclone.domain.post.dto.request.PostCreate;
+import com.example.instagramclone.domain.post.dto.response.FeedResponse;
 import com.example.instagramclone.domain.post.dto.response.PostDetailResponse;
 import com.example.instagramclone.domain.post.dto.response.PostResponse;
 import com.example.instagramclone.domain.post.entity.Post;
@@ -36,13 +37,14 @@ public class PostService {
     private final MemberRepository memberRepository; // 사용자 정보 가져오기
     private final PostLikeRepository postLikeRepository; // 좋아요 정보 가져오기
     private final CommentRepository commentRepository; // 댓글 정보 가져오기
+    private final FollowRepository followRepository; // 팔로우 정보
 
     private final FileUploadUtil fileUploadUtil; // 로컬서버에 이미지 저장
     private final HashtagUtil hashtagUtil; // 해시태그 추출기
 
     // 피드 목록조회 중간처리
     @Transactional(readOnly = true)
-    public List<PostResponse> findAllFeeds(String username, int size, int page) {
+    public FeedResponse findAllFeeds(String username, int size, int page) {
 
         // offset은 size에 따라 숫자가 바뀜
         /*
@@ -54,8 +56,17 @@ public class PostService {
         Member foundMember = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
 
-        // 전체 피드 조회
-        return postRepository.findAll(offset, size+1)
+
+        // 이 유저가 팔로잉 수가 하나라도 있는지 체크
+        boolean hasFollowing
+                = followRepository.countFollowByType(foundMember.getId(), "following") > 0;
+
+        List<Post> posts = hasFollowing
+                ? postRepository.findFeedPosts(foundMember.getId(), offset, size + 1)
+                : postRepository.findRecommendedPosts(offset, size + 1);
+
+        // 전체 피드 조회 - 사이즈를 하나 더 크게 조회하여 다음 데이터가 있는지 체크
+        List<PostResponse> feedList = posts
                 .stream()
                 .map(feed -> {
                     LikeStatusResponse likeStatus = LikeStatusResponse.of(
@@ -66,6 +77,19 @@ public class PostService {
                     return PostResponse.of(feed, likeStatus, commentCount);
                 })
                 .collect(Collectors.toList());
+
+        // 다음 페이지가 존재하는지 여부 확인
+        // 클라이언트가 요구한 개수보다 많이 조회되었다면
+        boolean hasNext = feedList.size() > size;
+
+        // 클라이언트에게 다음 페이지 데이터가 있는게 확인되었다면
+        // size + 1개를 반환하면 안된다. 마지막 데이터를 지우고 반환
+        if (hasNext) {
+            feedList.remove(feedList.size() - 1);
+        }
+
+        return FeedResponse.of(feedList, hasNext);
+
     }
 
 
