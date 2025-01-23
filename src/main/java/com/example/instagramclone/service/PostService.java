@@ -42,13 +42,20 @@ public class PostService {
 
     // 피드 목록조회 중간처리
     @Transactional(readOnly = true)
-    public List<PostResponse> findAllFeeds(String username) {
+    public List<PostResponse> findAllFeeds(String username, int size, int page) {
+
+        // offset은 size에 따라 숫자가 바뀜
+        /*
+            size = 5   ->   offset  0, 5, 10, 15, 20
+            size = 3   ->   offset  0, 3, 6, 9, 12, 15
+         */
+        int offset = (page - 1) * size;
 
         Member foundMember = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 전체 피드 조회
-        return postRepository.findAll()
+        return postRepository.findAll(offset, size+1)
                 .stream()
                 .map(feed -> {
                     LikeStatusResponse likeStatus = LikeStatusResponse.of(

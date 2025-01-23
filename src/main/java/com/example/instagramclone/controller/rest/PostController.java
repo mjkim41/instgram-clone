@@ -28,12 +28,12 @@ public class PostController {
     // 피드 목록 조회 요청
     @GetMapping
     public ResponseEntity<?> getFeeds(
-            @AuthenticationPrincipal String username
+            @AuthenticationPrincipal String username,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size
     ) {
 
-        log.info("피드에서 인증된 사용자명: {}", username);
-
-        List<PostResponse> allFeeds = postService.findAllFeeds(username);
+        List<PostResponse> allFeeds = postService.findAllFeeds(username, size, page);
 
         return ResponseEntity
                 .ok()
