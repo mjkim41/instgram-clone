@@ -1,3 +1,4 @@
+
 /* src/main/resources/static/css/suggestions.css */
 
 .suggestions {
@@ -13,7 +14,7 @@
     margin-bottom: 24px;
 }
 
-.user-profile {
+.suggestions .user-profile {
     display: flex;
     align-items: center;
     padding: 8px 0;

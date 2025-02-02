@@ -1,4 +1,3 @@
-
 package com.example.instagramclone.repository;
 
 import com.example.instagramclone.domain.member.entity.Member;
@@ -31,5 +30,8 @@ public interface MemberRepository {
             @Param("currentUserId") Long currentUserId,
             @Param("limit") int limit
     );
+
+    // 검색어 기반 회원 검색
+    List<Member> searchMembers(String keyword);
 
 }
